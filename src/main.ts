@@ -4,8 +4,10 @@ import {
   drawCharacter,
   setCharacterInitialPosition,
   onResizeCharacter,
-  moveCharacter,
+  moveCharacterRight,
   getCharacter,
+  jump,
+  moveCharacterDown,
 } from "./game/character";
 
 async function initGame(): Promise<void> {
@@ -15,6 +17,7 @@ async function initGame(): Promise<void> {
     backgroundColor: 0x87ceeb,
   });
 
+  const character = getCharacter();
   document.body.appendChild(app.canvas);
 
   await createBackground(app);
@@ -25,9 +28,25 @@ async function initGame(): Promise<void> {
   app.stage.addChild(getCharacter());
 
   window.addEventListener("resize", () => onResizeCharacter(app));
+  window.addEventListener("keydown", (event: KeyboardEvent) => {
+    if (event.code === "Space") {
+      event.preventDefault();
+      jump();
+    }
+  });
+
 
   function update(delta: number): void {
-    moveCharacter(delta);
+    const top = character.height;
+    const bottom = app.screen.height - character.height;
+    
+    moveCharacterRight(delta);
+    
+    if (character.y < bottom) {
+      moveCharacterDown(1.2 * delta);
+    }
+  
+    character.y = Math.min(Math.max(character.y, top), bottom);
   }
 
   app.ticker.add((ticker) => {
