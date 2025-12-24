@@ -9,6 +9,7 @@ import {
   jump,
   moveCharacterDown,
 } from "./game/character";
+import { updateWalls, getWalls, resetWalls } from "./game/wall";
 
 async function initGame(): Promise<void> {
   const app = new Application();
@@ -26,6 +27,9 @@ async function initGame(): Promise<void> {
   drawCharacter();
   setCharacterInitialPosition(app);
   app.stage.addChild(getCharacter());
+  
+  updateWalls(0, app, app.stage);
+
 
   window.addEventListener("resize", () => onResizeCharacter(app));
   window.addEventListener("keydown", (event: KeyboardEvent) => {
@@ -35,18 +39,16 @@ async function initGame(): Promise<void> {
     }
   });
 
-
   function update(delta: number): void {
     const top = character.height;
     const bottom = app.screen.height - character.height;
-    
-    moveCharacterRight(delta);
-    
+        
     if (character.y < bottom) {
-      moveCharacterDown(1.2 * delta);
+      moveCharacterDown(5 * delta);
     }
   
     character.y = Math.min(Math.max(character.y, top), bottom);
+    updateWalls(delta, app, app.stage);
   }
 
   app.ticker.add((ticker) => {
