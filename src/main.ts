@@ -9,7 +9,10 @@ import {
   jump,
   moveCharacterDown,
 } from "./game/character";
-import { updateWalls, getWalls, resetWalls } from "./game/wall";
+import { updateWalls, getWalls } from "./game/wall";
+import { isColliding } from "./game/collision";
+import { setGameOver, getGameOver, resetGame } from "./game/gameState";
+
 
 async function initGame(): Promise<void> {
   const app = new Application();
@@ -35,11 +38,17 @@ async function initGame(): Promise<void> {
   window.addEventListener("keydown", (event: KeyboardEvent) => {
     if (event.code === "Space") {
       event.preventDefault();
-      jump();
+      if (!getGameOver()) {
+        jump();
+      }
     }
   });
 
   function update(delta: number): void {
+    if (getGameOver()) {
+      return;
+    }
+
     const top = character.height;
     const bottom = app.screen.height - character.height;
         
@@ -49,6 +58,15 @@ async function initGame(): Promise<void> {
   
     character.y = Math.min(Math.max(character.y, top), bottom);
     updateWalls(delta, app, app.stage);
+    
+    const walls = getWalls();
+
+    for (const wall of walls) {
+      if (isColliding(character, wall.top) || isColliding(character, wall.bottom)) {
+        setGameOver();
+        return;
+      }
+    }
   }
 
   app.ticker.add((ticker) => {
