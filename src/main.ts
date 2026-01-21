@@ -40,8 +40,26 @@ async function initGame(): Promise<void> {
   scoreText.anchor.set(0.5);
   app.stage.addChild(scoreText);
 
+  const gameOverText = new Text({ text: "Game Over", style: { fontSize: 64, fill: 0xff0000, fontWeight: "bold" } });
+  gameOverText.x = app.screen.width / 2;
+  gameOverText.y = app.screen.height / 2 - 50;
+  gameOverText.anchor.set(0.5);
+  gameOverText.visible = false;
+  app.stage.addChild(gameOverText);
 
-  window.addEventListener("resize", () => onResizeCharacter(app));
+  const restartText = new Text({ text: "Press R to restart", style: { fontSize: 32, fill: 0xffffff, fontWeight: "bold" } });
+  restartText.x = app.screen.width / 2;
+  restartText.y = app.screen.height / 2 + 30;
+  restartText.anchor.set(0.5);
+  restartText.visible = false;
+  app.stage.addChild(restartText);
+
+
+  window.addEventListener("resize", () => {
+    onResizeCharacter(app);
+    gameOverText.x = app.screen.width / 2;
+    restartText.x = app.screen.width / 2;
+  });
   window.addEventListener("keydown", (event: KeyboardEvent) => {
     if (event.code === "Space") {
       event.preventDefault();
@@ -55,11 +73,17 @@ async function initGame(): Promise<void> {
       resetWalls(app.stage);
       score = 0;
       displayScore = 0;
+      gameOverText.visible = false;
+      restartText.visible = false;
     }
   });
 
   function update(delta: number): void {
     if (getGameOver()) {
+      gameOverText.x = app.screen.width / 2;
+      gameOverText.y = app.screen.height / 2 - 50;
+      restartText.x = app.screen.width / 2;
+      restartText.y = app.screen.height / 2 + 30;
       return;
     }
 
@@ -83,6 +107,8 @@ async function initGame(): Promise<void> {
       }
       if (isColliding(character, wall.top) || isColliding(character, wall.bottom)) {
         setGameOver();
+        gameOverText.visible = true;
+        restartText.visible = true;
         return;
       }
     }
