@@ -8,9 +8,9 @@ import {
   jump,
   moveCharacterDown,
 } from "./game/character";
-import { updateWalls, getWalls } from "./game/wall";
+import { updateWalls, getWalls, resetWalls } from "./game/wall";
 import { isColliding } from "./game/collision";
-import { setGameOver, getGameOver } from "./game/gameState";
+import { setGameOver, getGameOver, resetGame } from "./game/gameState";
 
 
 async function initGame(): Promise<void> {
@@ -48,6 +48,13 @@ async function initGame(): Promise<void> {
       if (!getGameOver()) {
         jump();
       }
+    }
+    if (event.code === "KeyR" && getGameOver()) {
+      resetGame();
+      setCharacterInitialPosition(app);
+      resetWalls(app.stage);
+      score = 0;
+      displayScore = 0;
     }
   });
 
