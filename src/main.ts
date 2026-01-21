@@ -84,6 +84,9 @@ async function initGame(): Promise<void> {
       gameOverText.y = app.screen.height / 2 - 50;
       restartText.x = app.screen.width / 2;
       restartText.y = app.screen.height / 2 + 30;
+      // Keep game over messages on top
+      app.stage.setChildIndex(gameOverText, app.stage.children.length - 1);
+      app.stage.setChildIndex(restartText, app.stage.children.length - 1);
       return;
     }
 
@@ -109,6 +112,9 @@ async function initGame(): Promise<void> {
         setGameOver();
         gameOverText.visible = true;
         restartText.visible = true;
+        // Move messages to top immediately
+        app.stage.setChildIndex(gameOverText, app.stage.children.length - 1);
+        app.stage.setChildIndex(restartText, app.stage.children.length - 1);
         return;
       }
     }
