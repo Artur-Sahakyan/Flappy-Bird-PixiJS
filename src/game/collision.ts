@@ -1,10 +1,8 @@
 import { Container } from "pixi.js";
 
-export function isColliding(charackter: Container, wall: Container): boolean {
-  const boundsA = charackter.getBounds();
+export function isColliding(character: Container, wall: Container): boolean {
+  const boundsA = character.getBounds();
   const boundsB = wall.getBounds();
-
-  //check when charackter touch the whalls
   return (
     boundsA.x < boundsB.x + boundsB.width &&
     boundsA.x + boundsA.width > boundsB.x &&

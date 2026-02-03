@@ -3,9 +3,8 @@ import { Assets, Sprite, type Application } from "pixi.js";
 let bgSprite: Sprite | null = null;
 
 export async function createBackground(app: Application): Promise<void> {
-  await Assets.load("bg-image.jpg");
-
-  bgSprite = Sprite.from("bg-image.jpg");
+  await Assets.load("/bg-image.jpg");
+  bgSprite = Sprite.from("/bg-image.jpg");
   resizeBackground(app);
 
   app.stage.addChildAt(bgSprite, 0);

@@ -12,7 +12,7 @@ export function drawCharacter(): void {
 }
 
 export function setCharacterInitialPosition(app: Application): void {
-  character.x = characterSize *10;
+  character.x = characterSize * 10;
   character.y = app.screen.height / 2;
 }
 

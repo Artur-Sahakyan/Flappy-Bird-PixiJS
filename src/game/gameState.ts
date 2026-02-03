@@ -1,3 +1,5 @@
+export type GameState = { score: number; displayScore: number };
+
 let isGameOver = false;
 
 export function setGameOver(): void {
